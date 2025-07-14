@@ -138,10 +138,11 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 LOGIN_URL = '/login/'  # ✅ user not logged in tar ithe
-LOGIN_REDIRECT_URL = '/dashboard/'  # ✅ login zhalyanantar ithe
+LOGIN_REDIRECT_URL = '/main_dashboard/'  # ✅ login zhalyanantar ithe
 LOGOUT_REDIRECT_URL = '/login/'  # ✅ logout zhalyanantar ithe
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['vidyarthi-portal-main.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://vidyarthi-portal-main.onrender.com']
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
