@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -52,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',  # ✅ Required
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'vidyarthi_portal.urls'
@@ -74,10 +77,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'vidyarthi_portal.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+'default': dj_database_url.config(default='sqlite:///db.sqlite3', conn_max_age=600)
+    
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -134,10 +135,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 AUTH_USER_MODEL = 'frontend.CustomUser'
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 LOGIN_URL = '/login/'  # ✅ user not logged in tar ithe
 LOGIN_REDIRECT_URL = '/dashboard/'  # ✅ login zhalyanantar ithe
 LOGOUT_REDIRECT_URL = '/login/'  # ✅ logout zhalyanantar ithe
 
+ALLOWED_HOSTS = ['*']
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
