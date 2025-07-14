@@ -57,6 +57,10 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "https://vidyarthi-portal-main.onrender.com",  # ✅ Allow frontend on Render
+]
+
 ROOT_URLCONF = 'vidyarthi_portal.urls'
 
 TEMPLATES = [
