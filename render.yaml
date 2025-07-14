@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: vidyarthi-portal
+    env: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn vidyarthi_portal.wsgi:application"
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        fromSecret: SECRET_KEY
