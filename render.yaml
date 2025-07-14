@@ -6,7 +6,7 @@ services:
     startCommand: gunicorn vidyarthi_portal_main.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: vidyarthi_portal_main.settings
+        value: vidyarthi_portal.settings
       - key: SECRET_KEY
         value: django-insecure-kwan1jd+^9*3jm+l8pa12y7)k60n^q691=*q8snwi0syo1lfh2
       - key: ALLOWED_HOSTS
