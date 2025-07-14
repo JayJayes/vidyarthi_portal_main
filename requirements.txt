@@ -43,9 +43,7 @@ phonenumbers==8.13.54
 pillow==11.1.0
 pipwin==0.5.2
 platformdirs==4.3.6
-playsound==1.2.2
 psycopg2-binary==2.9.10
-PyAudio==0.2.14
 pycparser==2.22
 pyjsparser==2.7.1
 PyJWT==2.9.0
