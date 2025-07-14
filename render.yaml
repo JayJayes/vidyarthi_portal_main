@@ -1,12 +1,14 @@
 services:
   - type: web
-    name: vidyarthi-portal
+    name: vidyarthi-portal-backend
     env: python
-    plan: free
-    buildCommand: "./build.sh"
-    startCommand: "gunicorn vidyarthi_portal.wsgi:application"
+    buildCommand: ""
+    startCommand: gunicorn vidyarthi_portal_main.wsgi:application
     envVars:
-      - key: DEBUG
-        value: "False"
+      - key: DJANGO_SETTINGS_MODULE
+        value: vidyarthi_portal_main.settings
       - key: SECRET_KEY
-        fromSecret: SECRET_KEY
+        value: django-insecure-kwan1jd+^9*3jm+l8pa12y7)k60n^q691=*q8snwi0syo1lfh2
+      - key: ALLOWED_HOSTS
+        value: vidyarthi-portal-backend.onrender.com
+

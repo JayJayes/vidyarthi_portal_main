@@ -58,7 +58,11 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://vidyarthi-portal-main.onrender.com",  # ✅ Allow frontend on Render
+    "https://vidyarthi-portal-main.onrender.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://vidyarthi-portal-main.onrender.com",
 ]
 
 ROOT_URLCONF = 'vidyarthi_portal.urls'
