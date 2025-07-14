@@ -1,0 +1,196 @@
+<!-- {% load static %} -->
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidyarthi Mitra - Dashboard</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar Navigation -->
+        <aside class="w-64 bg-white shadow-md flex-shrink-0 flex flex-col">
+            <div class="p-6 text-center border-b">
+                <h1 class="text-2xl font-bold text-blue-600">🎓 विद्यार्थी मित्र</h1>
+                <div id="course-info" class="mt-4 bg-blue-50 text-blue-800 p-3 rounded-lg">
+                    <!-- Dynamic Info Here -->
+                </div>
+            </div>
+            <nav class="flex-1 px-4 py-4 space-y-2">
+                <a href="{% url 'dashboard' %}" class="flex items-center px-4 py-3 text-gray-700 bg-blue-100 text-blue-600 rounded-lg font-semibold">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    डॅशबोर्ड
+                </a>
+                <a href="{% url 'student_assignment_submit' %}" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    असाइनमेंट्स
+                </a>
+                <a href="{% url 'query_corner' %}" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    क्वेरी कॉर्नर
+                </a>
+            </nav>
+<div class="p-4 border-t mt-auto">
+    <div class="flex items-center">
+        <img id="user-avatar" class="h-10 w-10 rounded-full object-cover" src="https://placehold.co/100x100/E2E8F0/4A5568?text=V" alt="User profile">
+        <div class="ml-3">
+            {% if user.is_authenticated %}
+                <p id="user-name" class="text-sm font-semibold text-gray-800">स्वागत, {{ user.username }}</p>
+                <a href="{% url 'logout' %}" class="text-xs text-red-600 hover:underline">लॉगआउट</a>
+            {% else %}
+                <p class="text-sm text-gray-500">कृपया <a href="{% url 'login' %}" class="text-blue-600 underline">लॉगिन</a> करा</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 sm:p-10 overflow-y-auto">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-gray-800">डॅशबोर्ड</h2>
+                <p class="text-gray-500 mt-1">तुमच्या सर्व शैक्षणिक माहितीचा आढावा.</p>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Card 1: Assignments -->
+                <div id="assignments-card" class="bg-white p-6 rounded-2xl shadow-md">
+                    <div class="flex items-center mb-4">
+                         <div class="bg-orange-100 p-3 rounded-full">
+                            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        </div>
+                        <h3 class="ml-4 text-xl font-semibold text-gray-700">नवीन असाइनमेंट्स</h3>
+                    </div>
+                    <div id="assignments-summary" class="space-y-3">
+                        <!-- <p class="text-red-500">असाइनमेंट्स लोड करता आल्या नाहीत.</p> -->
+                        <a href="{% url 'assignment_dashboard' %}" class="font-semibold text-blue-600 hover:underline">तुमचे सगळे Assignments बघा →</a>
+                    </div>
+
+                </div>
+
+                <!-- Card 2: Exam Schedule -->
+                <div id="exams-card" class="bg-white p-6 rounded-2xl shadow-md">
+                   <div class="flex items-center mb-4">
+                        <div class="bg-red-100 p-3 rounded-full">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 class="ml-4 text-xl font-semibold text-gray-700">आगामी परीक्षा</h3>
+                    </div>
+                    <div id="exams-summary" class="space-y-3">
+                        <p class="text-gray-600">लोड होत आहे...</p>
+                        <a href="{% url 'assignments' %}" class="font-semibold text-blue-600 hover:underline">सर्व पहा →</a>
+
+                    </div>
+                </div>
+
+                <!-- Card 3: Query Corner -->
+                 <div id="queries-card" class="bg-white p-6 rounded-2xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h3 class="ml-4 text-xl font-semibold text-gray-700">क्वेरी कॉर्नर</h3>
+                    </div>
+                    <div id="queries-summary" class="space-y-3">
+                        <p class="text-gray-600">लोड होत आहे...</p>
+                        <a href="{% url 'query_corner' %}" class="font-semibold text-blue-600 hover:underline">शंका विचारा/पहा →</a>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const authToken = localStorage.getItem('authToken');
+            if (!authToken) {
+                window.location.href = '/login/';
+                return;
+            }
+
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${authToken}`
+            };
+
+            // API Base URL
+            const API_BASE_URL = 'http://127.0.0.1:8000/api';
+
+            // Fetch and display user info
+            const userNameEl = document.getElementById('user-name');
+            fetch(`${API_BASE_URL}/users/me/`, { headers }) // Assume /users/me/ endpoint exists
+                .then(res => res.ok ? res.json() : Promise.reject(res))
+                .then(user => {
+                    userNameEl.textContent = `स्वागत, ${user.first_name || user.username}!`;
+                })
+                .catch(() => userNameEl.textContent = 'स्वागत!');
+
+            // Fetch and display assignments summary
+            const assignmentsSummaryEl = document.getElementById('assignments-summary');
+            fetch(`${API_BASE_URL}/assignments/?status=pending`, { headers })
+                .then(res => res.ok ? res.json() : Promise.reject(res))
+                .then(data => {
+                    const pendingCount = data.length;
+                    assignmentsSummaryEl.innerHTML = `
+                        <p class="text-gray-600">तुमच्याकडे <span class="font-bold text-orange-500">${pendingCount}</span> प्रलंबित असाइनमेंट्स आहेत.</p>
+                        <a href="/assignments/" class="font-semibold text-blue-600 hover:underline">सर्व पहा →</a>
+                    `;
+                })
+                 .catch(() => {
+                   assignmentsSummaryEl.innerHTML = `
+        
+                       <a href="{% url 'assignment_dashboard' %}" class="font-semibold text-blue-600 hover:underline">तुमचे सगळे Assignments बघा →</a>
+    `               ;
+               });
+
+
+            // Fetch and display exams summary (Mocked for now)
+            const examsSummaryEl = document.getElementById('exams-summary');
+            // TODO: Create an endpoint for exams in the backend
+            examsSummaryEl.innerHTML = `
+                <p class="text-gray-600">तुमची पुढील परीक्षा जवळ येत आहे.</p>
+                <div class="text-sm p-3 bg-red-50 rounded-lg">
+                    <p><strong class="text-red-700">Internal Assessment 1</strong></p>
+                    <p><strong>तारीख:</strong> १५ जुलै २०२५</p>
+                </div>
+                <a href="#" class="font-semibold text-blue-600 hover:underline">पूर्ण वेळापत्रक पहा →</a>
+            `;
+
+            // Fetch and display queries summary
+            const queriesSummaryEl = document.getElementById('queries-summary');
+            fetch(`${API_BASE_URL}/queries/?status=open`, { headers })
+                .then(res => res.ok ? res.json() : Promise.reject(res))
+                .then(data => {
+                    const openQueries = data.length;
+                    queriesSummaryEl.innerHTML = `
+                        <p class="text-gray-600">तुमच्या <span class="font-bold text-green-500">${openQueries}</span> प्रश्नांची उत्तरे प्रलंबित आहेत.</p>
+                        <a href="query_corner.html" class="font-semibold text-blue-600 hover:underline">शंका विचारा/पहा →</a>
+                    `;
+                })
+                .catch(() => queriesSummaryEl.innerHTML = `<p class="text-red-500">क्वेरीज लोड करता आल्या नाहीत.</p>`);
+
+            // Logout functionality
+            document.getElementById('logout-button').addEventListener('click', () => {
+                localStorage.clear();
+                window.location.href = "{% url 'login' %}";
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidyarthi Mitra - Assignments</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Alpine.js for interactivity -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div x-data="{ isModalOpen: false, selectedAssignmentId: null, selectedAssignmentTitle: '' }" class="flex h-screen">
+        <!-- Sidebar Navigation (Same as Dashboard) -->
+        <aside class="w-64 bg-white shadow-md flex-shrink-0 flex flex-col">
+             <div class="p-6 text-center border-b">
+                <h1 class="text-2xl font-bold text-blue-600">🎓 विद्यार्थी मित्र</h1>
+            </div>
+            <nav class="flex-1 px-4 py-4 space-y-2">
+                <a href="/dashboard/" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    डॅशबोर्ड
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 bg-blue-100 text-blue-600 rounded-lg font-semibold">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    असाइनमेंट्स
+                </a>
+                <a href="{% url 'query_corner' %}" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    क्वेरी कॉर्नर
+                </a>
+            </nav>
+            <!-- <div class="p-4 border-t mt-auto">
+                <p id="user-name" class="text-sm font-semibold text-gray-800">[विद्यार्थ्याचे नाव]</p>
+            </div> -->
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 sm:p-10 overflow-y-auto">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-gray-800">तुमच्या असाइनमेंट्स</h2>
+                <p class="text-gray-500 mt-1">येथे तुमच्या सर्व विषयांच्या असाइनमेंट्स पहा आणि अपलोड करा.</p>
+            </div>
+
+            <!-- Assignments Table -->
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-600">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-4">विषय</th>
+                                <th scope="col" class="px-6 py-4">असाइनमेंट शीर्षक</th>
+                                <th scope="col" class="px-6 py-4">अंतिम तारीख</th>
+                                <th scope="col" class="px-6 py-4 text-center">स्टेटस</th>
+                                <th scope="col" class="px-6 py-4 text-center">क्रिया (Action)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assignments-table-body">
+                            <!-- Loader Row -->
+                            <tr>
+                                <td colspan="5" class="text-center p-8">
+                                    <div class="flex justify-center items-center">
+                                        <div class="loader"></div>
+                                        <span class="ml-4 text-gray-500">असाइनमेंट्स लोड होत आहेत...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Upload Modal (पॉप-अप विंडो) -->
+        <div x-show="isModalOpen" x-transition class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" @click.away="isModalOpen = false">
+            <div @click.stop class="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4">
+                <form id="upload-form">
+                    <div class="p-6 border-b flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">असाइनमेंट अपलोड करा</h3>
+                        <button type="button" @click="isModalOpen = false" class="text-gray-400 hover:text-gray-600">&times;</button>
+                    </div>
+                    <div class="p-6">
+                        <p class="mb-4"><strong>शीर्षक:</strong> <span x-text="selectedAssignmentTitle"></span></p>
+                        <label for="file-upload" class="block mb-2 text-sm font-medium text-gray-700">तुमची फाईल निवडा (PDF, DOCX, JPG):</label>
+                        <input id="file-upload" name="file" type="file" required class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+                    </div>
+                    <div class="p-6 border-t bg-gray-50 flex justify-end space-x-4 rounded-b-2xl">
+                        <button type="button" @click="isModalOpen = false" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-lg hover:bg-gray-100">रद्द करा</button>
+                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">सबमिट करा</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const authToken = localStorage.getItem('authToken');
+            if (!authToken) {
+                window.location.href = '/login/';
+                return;
+            }
+
+            const API_BASE_URL = 'http://127.0.0.1:8000/api';
+            const headers = { 'Authorization': `Token ${authToken}` };
+            const tableBody = document.getElementById('assignments-table-body');
+            const uploadForm = document.getElementById('upload-form');
+            
+            async function fetchAssignments() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/assignments/`, { headers });
+                    if (!response.ok) throw new Error('Failed to fetch');
+                    const assignments = await response.json();
+                    
+                    tableBody.innerHTML = ''; // Clear loader
+                    if (assignments.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="5" class="text-center p-8 text-gray-500">कोणतीही असाइनमेंट उपलब्ध नाही.</td></tr>`;
+                        return;
+                    }
+
+                    assignments.forEach(assignment => {
+                        const dueDate = new Date(assignment.due_date);
+                        const isOverdue = new Date() > dueDate;
+                        const isSubmitted = assignment.submissions.some(sub => sub.student.toString() === getStudentId()); // Assuming you can get student id
+
+                        let statusHtml, actionHtml;
+
+                        if (isSubmitted) {
+                            statusHtml = `<span class="px-3 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">जमा केली</span>`;
+                            actionHtml = `<button class="font-medium text-white bg-gray-400 cursor-not-allowed rounded-lg px-4 py-2 text-xs" disabled>पहा</button>`;
+                        } else if (isOverdue) {
+                            statusHtml = `<span class="px-3 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">वेळ संपली</span>`;
+                            actionHtml = `<button class="font-medium text-white bg-red-500 cursor-not-allowed rounded-lg px-4 py-2 text-xs" disabled>अपलोड</button>`;
+                        } else {
+                            statusHtml = `<span class="px-3 py-1 text-xs font-medium text-orange-800 bg-orange-100 rounded-full">प्रलंबित</span>`;
+                            actionHtml = `<button @click="isModalOpen = true; selectedAssignmentId = ${assignment.id}; selectedAssignmentTitle = '${assignment.title}'" class="font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 text-xs">अपलोड करा</button>`;
+                        }
+
+                        const row = `
+                            <tr class="bg-white border-b hover:bg-gray-50">
+                                <td class="px-6 py-4 font-medium">${assignment.course_name}</td>
+                                <td class="px-6 py-4">${assignment.title}</td>
+                                <td class="px-6 py-4">${dueDate.toLocaleDateString('mr-IN')}</td>
+                                <td class="px-6 py-4 text-center">${statusHtml}</td>
+                                <td class="px-6 py-4 text-center">${actionHtml}</td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                } catch (error) {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="text-center p-8 text-red-500">असाइनमेंट्स लोड करताना एरर आला.</td></tr>`;
+                }
+            }
+
+            uploadForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const fileInput = document.getElementById('file-upload');
+                const assignmentId = document.querySelector('[x-data]').__x.$data.selectedAssignmentId;
+                
+                if (!fileInput.files[0] || !assignmentId) {
+                    alert('कृपया फाईल निवडा.');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/assignments/${assignmentId}/submit/`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Token ${authToken}` },
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        alert('असाइनमेंट यशस्वीरित्या सबमिट झाली!');
+                        document.querySelector('[x-data]').__x.$data.isModalOpen = false;
+                        fetchAssignments(); // Refresh the list
+                    } else {
+                        const errorData = await response.json();
+                        alert('सबमिशन अयशस्वी: ' + (errorData.detail || 'एक एरर आला.'));
+                    }
+                } catch (error) {
+                    alert('सबमिशन करताना नेटवर्क एरर आला.');
+                }
+            });
+
+            // Helper to get student ID (you might get this from a /users/me/ endpoint)
+            function getStudentId() { return '1'; /* Replace with actual student ID */ }
+
+            fetchAssignments();
+        });
+    </script>
+</body>
+</html>

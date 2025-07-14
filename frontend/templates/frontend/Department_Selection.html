@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidyarthi Mitra - Department Selection</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-gray-800">
+                🎓 विद्यार्थी मित्र
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="user-name" class="text-gray-700 font-medium">स्वागत...</span>
+                <button id="logout-button" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
+                    लॉगआउट
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800">तुमचे डिपार्टमेंट निवडा</h1>
+            <p class="text-gray-500 mt-2">तुमचा अभ्यासक्रम सुरू करण्यासाठी खालीलपैकी एक विभाग निवडा.</p>
+        </div>
+
+        <!-- Department Cards Grid -->
+        <div id="departments-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Department cards will be inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const departmentsGrid = document.getElementById('departments-grid');
+            const logoutButton = document.getElementById('logout-button');
+            const userNameSpan = document.getElementById('user-name');
+            const mainContent = document.querySelector('main');
+            const header = document.querySelector('header');
+
+            // 1. वापरकर्ता लॉगिन आहे का ते तपासा
+            const authToken = localStorage.getItem('authToken');
+            if (!authToken) {
+                // FIX: Instead of redirecting (which causes errors), show a message.
+                mainContent.innerHTML = `
+                    <div class="text-center p-10 bg-white rounded-lg shadow-md">
+                        <h1 class="text-2xl font-bold text-red-600">एरर: तुम्ही लॉगिन केलेले नाही.</h1>
+                        <p class="mt-2 text-gray-600">कृपया पुढे जाण्यासाठी लॉगिन पेजवर जा.</p>
+                    </div>
+                `;
+                header.style.display = 'none'; // Hide header if not logged in
+                return;
+            }
+             userNameSpan.textContent = 'स्वागत!';
+
+            // 2. Static list of departments as requested
+            const departments = [
+                { 
+                    id: 1, 
+                    name: 'Computer Science', 
+                    description: 'तंत्रज्ञानाचे भविष्य', 
+                    icon: `<svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>`,
+                    color: 'blue'
+                },
+                { 
+                    id: 2, 
+                    name: 'Mathematics', 
+                    description: 'गणिताचे जग',
+                    icon: `<svg class="w-10 h-10 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7.5l3 4.5m0 0l3-4.5M12 12v5.25M15 12H9m6 3H9m12-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+                    color: 'purple'
+                },
+                { 
+                    id: 3, 
+                    name: 'Chemistry', 
+                    description: 'रसायनांची दुनिया',
+                    icon: `<svg class="w-10 h-10 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.215-.283.49-.533.795-.732a9.75 9.75 0 011.252-2.119A2.25 2.25 0 0118.75 2.25h.381a2.25 2.25 0 012.25 2.25v.381a2.25 2.25 0 01-.224 1.004 9.75 9.75 0 01-2.119 1.252c-.2.299-.512.584-.732.795-.283.215-.604.401-.959.401h-.381a2.25 2.25 0 01-2.25-2.25v-.381zM6.363 18.363c-.355 0-.676-.186-.959-.401-.283-.215-.533-.49-.732-.795a9.75 9.75 0 01-2.119-1.252A2.25 2.25 0 012.25 15h-.381a2.25 2.25 0 01-2.25-2.25v-.381c0-.421.103-.828.224-1.004a9.75 9.75 0 012.119-1.252c.2-.299.512.584-.732-.795.283-.215.604-.401.959-.401h.381a2.25 2.25 0 012.25 2.25v.381c0 .421-.103.828-.224 1.004a9.75 9.75 0 01-2.119 1.252c-.2.299-.512.584-.732-.795-.283-.215-.604.401-.959.401h-.381z" /></svg>`,
+                    color: 'green'
+                },
+                { 
+                    id: 4, 
+                    name: 'Botany', 
+                    description: 'वनस्पतीशास्त्राचे रहस्य',
+                    icon: `<svg class="w-10 h-10 text-pink-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>`,
+                    color: 'pink'
+                }
+            ];
+
+            // 3. Render the static department cards
+            departmentsGrid.innerHTML = ''; // Clear any initial content like a loader
+            departments.forEach(dept => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-300 cursor-pointer";
+                card.innerHTML = `
+                    <div class="flex flex-col items-center text-center">
+                        <div class="bg-${dept.color}-100 p-4 rounded-full mb-4">
+                            ${dept.icon}
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">${dept.name}</h3>
+                        <p class="text-gray-500 mt-1">${dept.description}</p>
+                    </div>
+                `;
+                card.onclick = () => {
+    localStorage.setItem('selectedDeptId', dept.id);
+    alert(`तुम्ही '${dept.name}' निवडले आहे.`);
+
+    // Mathematics साठी redirect
+    if (dept.name === 'Mathematics') {
+        window.location.href ="/dashboard/";
+    }
+
+    // उदाहरणार्थ, बाकी डिपार्टमेंट्स साठी तुम्ही वेगवेगळे redirects ठेऊ शकता
+    // else if (dept.name === 'Computer Science') {
+    //     window.location.href = 'cs-dashboard.html';
+    // }
+};
+
+                departmentsGrid.appendChild(card);
+            });
+
+            // 4. Logout button functionality
+            logoutButton.addEventListener('click', () => {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('selectedDeptId');
+                // FIX: Instead of redirecting, show a logged out message.
+                mainContent.innerHTML = `
+                    <div class="text-center p-10 bg-white rounded-lg shadow-md">
+                        <h1 class="text-2xl font-bold text-green-600">तुम्ही यशस्वीरित्या लॉगआउट झाला आहात.</h1>
+                        <p class="mt-2 text-gray-600">पुन्हा लॉगिन करण्यासाठी, कृपया लॉगिन पेजवर जा.</p>
+                    </div>
+                `;
+                header.style.display = 'none'; // Hide header on logout
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+    <div class="max-w-5xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-blue-700 mb-6">📚 Submitted Assignments</h1>
+
+        {% if submitted_assignments %}
+        <table class="w-full table-auto border-collapse mb-10">
+            <thead>
+                <tr class="bg-blue-100 text-left">
+                    <th class="py-2 px-4 border">ID</th>
+                    <th class="py-2 px-4 border">Title</th>
+                    <th class="py-2 px-4 border">Submitted At</th>
+                    <th class="py-2 px-4 border">File</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for submission in submitted_assignments %}
+                <tr class="border-t hover:bg-gray-50">
+                    <td class="py-2 px-4 border">{{ submission.assignment.id }}</td>
+                    <td class="py-2 px-4 border">{{ submission.assignment.title }}</td>
+                    <td class="py-2 px-4 border">{{ submission.submitted_at|date:"d M Y, H:i" }}</td>
+                    <td class="py-2 px-4 border">
+                        <a href="{{ submission.file.url }}" class="text-blue-600 hover:underline" download>
+                            Download PDF
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-gray-600">No assignments submitted yet.</p>
+        {% endif %}
+
+        <h2 class="text-xl font-bold text-red-600 mb-4">📌 Pending Assignments</h2>
+
+        {% if pending_assignments %}
+        <table class="w-full table-auto border-collapse">
+            <thead>
+                <tr class="bg-yellow-100 text-left">
+                    <th class="py-2 px-4 border">ID</th>
+                    <th class="py-2 px-4 border">Title</th>
+                    <th class="py-2 px-4 border">Uploaded</th>
+                    <th class="py-2 px-4 border">Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in pending_assignments %}
+                <tr class="border-t hover:bg-gray-50">
+                    <td class="py-2 px-4 border">{{ assignment.id }}</td>
+                    <td class="py-2 px-4 border">{{ assignment.title }}</td>
+                    <td class="py-2 px-4 border">{{ assignment.uploaded_at|date:"d M Y, H:i" }}</td>
+                    <td class="py-2 px-4 border">
+                        <a href="{{ assignment.file.url }}" class="text-blue-600 hover:underline" download>
+                            Download PDF
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-gray-600">No pending assignments.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
