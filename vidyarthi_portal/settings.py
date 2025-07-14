@@ -64,7 +64,17 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://vidyarthi-portal-main.onrender.com",
 ]
+CORS_ALLOW_CREDENTIALS = True
 
+SESSION_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SECURE = True
+ALLOWED_HOSTS = [
+    "vidyarthi-portal-main.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 ROOT_URLCONF = 'vidyarthi_portal.urls'
 
 TEMPLATES = [

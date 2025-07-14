@@ -1,1 +1,1 @@
-web: gunicorn vidyarthi_portal_fixed.wsgi:application
+web: waitress-serve --port=$PORT vidyarthi_portal_fixed.wsgi:application
