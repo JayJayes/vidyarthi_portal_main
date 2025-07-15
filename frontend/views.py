@@ -12,6 +12,9 @@ User = get_user_model()
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 User = get_user_model()
+from django.http import JsonResponse
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 
 # For Student Dashboard
 
@@ -152,4 +155,7 @@ def logout_view(request):
     logout(request)
     return redirect('login')  # जे login_view आहे तेच
 
-
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def test_cors(request):
+    return JsonResponse({"message": "CORS setup working!"})

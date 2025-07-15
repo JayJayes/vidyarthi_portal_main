@@ -3,6 +3,7 @@ from django.urls import path, include
 from frontend import views as views 
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
+from frontend.views import test_cors
 
 
 urlpatterns = [
@@ -19,7 +20,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     
-
+    path("api/test-cors/", test_cors, name="test_cors"),
 
     #Teacher Dashboard
     path('teacher_dashboard/', views.teacher_dashboard, name='teacher_dashboard'),
