@@ -23,12 +23,7 @@ SECRET_KEY = 'django-insecure-kwan1jd+^9*3jm+l8pa12y7)k60n^q691=*q8snwi0syo1lfh2
 
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    "vidyarthi-portal-backend.onrender.com",
-    "vidyarthi-portal-main.onrender.com",
-    "localhost",
-    "127.0.0.1"
-]
+
 
 
 # Application definition
@@ -87,11 +82,14 @@ SESSION_COOKIE_SAMESITE = "None"
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_SECURE = True
+
 ALLOWED_HOSTS = [
+    "vidyarthi-portal-backend.onrender.com",
     "vidyarthi-portal-main.onrender.com",
-    "localhost",
     "127.0.0.1",
+    "localhost"
 ]
+
 ROOT_URLCONF = 'vidyarthi_portal.urls'
 
 TEMPLATES = [
