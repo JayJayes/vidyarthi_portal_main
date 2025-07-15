@@ -152,11 +152,11 @@ USE_TZ = True
 CORS_ALLOW_ALL_ORIGINS = True
 AUTH_USER_MODEL = 'frontend.CustomUser'
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 LOGIN_URL = '/login/'  # ✅ user not logged in tar ithe
-LOGIN_REDIRECT_URL = '/main_dashboard/'  # ✅ login zhalyanantar ithe
+LOGIN_REDIRECT_URL = '/dashboard/'  # ✅ login zhalyanantar ithe
 LOGOUT_REDIRECT_URL = '/login/'  # ✅ logout zhalyanantar ithe
 
 ALLOWED_HOSTS = ['vidyarthi-portal-main.onrender.com']
