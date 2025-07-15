@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from corsheaders.defaults import default_headers
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,9 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-kwan1jd+^9*3jm+l8pa12y7)k60n^q691=*q8snwi0syo1lfh2'
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "vidyarthi-portal-backend.onrender.com",
+    "vidyarthi-portal-main.onrender.com",
+    "localhost",
+    "127.0.0.1"
+]
 
 
 # Application definition
@@ -65,17 +71,11 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'X-CSRFToken',
+    'X-Requested-With',
 ]
+
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 
 CSRF_TRUSTED_ORIGINS = [
@@ -135,7 +135,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
         'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ],
 }
 
@@ -176,8 +176,8 @@ LOGIN_URL = '/login/'  # ✅ user not logged in tar ithe
 LOGIN_REDIRECT_URL = '/dashboard/'  # ✅ login zhalyanantar ithe
 LOGOUT_REDIRECT_URL = '/login/'  # ✅ logout zhalyanantar ithe
 
-ALLOWED_HOSTS = ['vidyarthi-portal-main.onrender.com']
-CSRF_TRUSTED_ORIGINS = ['https://vidyarthi-portal-main.onrender.com']
+# ALLOWED_HOSTS = ['vidyarthi-portal-main.onrender.com']
+# CSRF_TRUSTED_ORIGINS = ['https://vidyarthi-portal-main.onrender.com']
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
