@@ -71,7 +71,7 @@
       const password = document.getElementById('password').value;
 
       try {
-        const loginRes = await fetch("http://vidyarthi-portal-backend.onrender.com/api/auth/token/login/", {
+        const loginRes = await fetch("https://vidyarthi-portal-backend.onrender.com/api/auth/token/login/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
@@ -88,7 +88,7 @@
         localStorage.setItem("authToken", token);
 
         // ✅ आता token वापरून user ची role पाहू
-        const userRes = await fetch("http://vidyarthi-portal-backend.onrender.com/api/auth/users/me/", {
+        const userRes = await fetch("https://vidyarthi-portal-backend.onrender.com/api/auth/users/me/", {
           headers: {
             "Authorization": `Token ${token}`,
           }
